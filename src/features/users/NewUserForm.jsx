@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
-import { useAddNewUserMutation } from "./UsersApiSlice";
+import { useAddNewUserMutation } from "./usersApiSlice";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { ROLES } from "../../config/roles";
+import useTitle from "../../hooks/useTitle";
 
-const USER_REGEX = /^[A-z]{3,30}$/;
+const USER_REGEX = /^[A-z]{3,20}$/;
 const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/;
 
 const NewUserForm = () => {
+  useTitle("techNotes: New User");
+
   const [addNewUser, { isLoading, isSuccess, isError, error }] =
     useAddNewUserMutation();
 
@@ -42,7 +45,7 @@ const NewUserForm = () => {
 
   const onRolesChanged = (e) => {
     const values = Array.from(
-      e.target.selectedOptions, //HTML collection
+      e.target.selectedOptions, //HTMLCollection
       (option) => option.value
     );
     setRoles(values);
@@ -61,17 +64,17 @@ const NewUserForm = () => {
   const options = Object.values(ROLES).map((role) => {
     return (
       <option key={role} value={role}>
+        {" "}
         {role}
       </option>
     );
   });
 
-  // For form element className
   const errClass = isError ? "errmsg" : "offscreen";
-  const validUserClass = !validUsername ? "form_input--incomplete" : "";
-  const validPwdClass = !validPassword ? "form_input--incomplete" : "";
+  const validUserClass = !validUsername ? "form__input--incomplete" : "";
+  const validPwdClass = !validPassword ? "form__input--incomplete" : "";
   const validRolesClass = !Boolean(roles.length)
-    ? "form_input--incomplete"
+    ? "form__input--incomplete"
     : "";
 
   const content = (
@@ -132,5 +135,4 @@ const NewUserForm = () => {
 
   return content;
 };
-
 export default NewUserForm;

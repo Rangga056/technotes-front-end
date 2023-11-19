@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAddNewNoteMutation } from "./NotesApiSlice";
+import { useAddNewNoteMutation } from "./notesApiSlice.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 
@@ -12,7 +12,7 @@ const NewNoteForm = ({ users }) => {
 
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
-  const [userId, setUserId] = useState(users[0]?.id);
+  const [userId, setUserId] = useState(users[0].id);
 
   useEffect(() => {
     if (isSuccess) {
@@ -23,11 +23,9 @@ const NewNoteForm = ({ users }) => {
     }
   }, [isSuccess, navigate]);
 
-  console.log(isSuccess);
-
-  const onTitleChanged = e => setTitle(e.target.value);
-  const onTextChanged = e => setText(e.target.value);
-  const onUserIdChanged = e => setUserId(e.target.value);
+  const onTitleChanged = (e) => setTitle(e.target.value);
+  const onTextChanged = (e) => setText(e.target.value);
+  const onUserIdChanged = (e) => setUserId(e.target.value);
 
   const canSave = [title, text, userId].every(Boolean) && !isLoading;
 
@@ -35,13 +33,13 @@ const NewNoteForm = ({ users }) => {
     e.preventDefault();
     if (canSave) {
       await addNewNote({ user: userId, title, text });
-      console.log(userId)
     }
   };
 
   const options = users.map((user) => {
     return (
       <option key={user.id} value={user.id}>
+        {" "}
         {user.username}
       </option>
     );
@@ -101,7 +99,6 @@ const NewNoteForm = ({ users }) => {
           value={userId}
           onChange={onUserIdChanged}
         >
-          <option value=""></option>
           {options}
         </select>
       </form>
